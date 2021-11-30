@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { BinTreeNode } from "./TreeNode";
+/// @ts-ignore
+import jsonlint from 'jsonlint-mod';
 
 import "./TreeInput.scss"
 
@@ -8,22 +10,37 @@ export interface TreeInputProps {
 }
 
 export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
+    const { onChange: onJSONChange } = props;
+
     const [treeText, setTreeText] = useState('');
     const [arrayString, setArrayString] = useState('');
-    const [error, setError] = useState('')
+    const [arrayError, setArrayError] = useState('');
+    const [jsonError, setJsonError] = useState('');
 
     const handleInpuArrayOnChange = (selectorFiles: FileList | null) => {
         const reader = new FileReader();
         const file: File | null = selectorFiles ? selectorFiles[0] : null;
         if(file) {
             reader.onload = e => {
-                setError('');
+                setArrayError('');
                 const arrayString = e.target?.result as string || '';
                 setArrayString(arrayString); 
             }
             reader.readAsText(file);
         }
-    }
+    };
+
+    const handleTextAreaOnChange = (jsonString: string) => {
+        setTreeText(jsonString);
+        try {
+            const tree: BinTreeNode | null = jsonlint.parse(jsonString) as BinTreeNode;
+            onJSONChange(tree);
+            setJsonError('');
+        } catch (e) {
+            setJsonError(e.message);
+        }
+    };
+
 
     /**
      * Converts array format binary tree notation to BinTreeNode data structure
@@ -37,24 +54,42 @@ export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
     };
 
     const convert = () => {
-
-        let treeArrayFormat: any[] = [];
         try {
-            treeArrayFormat = JSON.parse(arrayString);
+            let treeArrayFormat: any[] = jsonlint.parse(arrayString);
+            if (!Array.isArray(treeArrayFormat))
+                throw new Error();
+            const tree: BinTreeNode | null = parseArrayToTree(treeArrayFormat);
+            onJSONChange(tree);
+            setTreeText(prettyStringify(tree));
         } catch {
-            setError('The array format must be: [id, leftChild, rightChild]');
-        }
-        const tree: BinTreeNode | null = parseArrayToTree(treeArrayFormat);
-        props.onChange(tree);
+            setArrayError('The array format must be: [id, leftChild, rightChild]');
+        } 
     }
+
+    const prettifyTextArea = () => {
+        try {
+            const tree : BinTreeNode | null = jsonlint.parse(treeText);
+            setTreeText(prettyStringify(tree));
+            setJsonError('');
+        } catch (e) {
+            setJsonError(e.message);
+        }
+    };
+
+    const prettyStringify = (tree: BinTreeNode | null) => JSON.stringify(tree, undefined, 4);
+
     return (
         <div>
             Array File: <input type='file' onChange={e => handleInpuArrayOnChange(e.target.files)} /><br />
             {
-                error && <span className='arrayInputError'>{error}</span>
+                arrayError && <span className='error'>{arrayError}</span>
             }
             <button onClick={convert}>Process</button><br />
-            <textarea value={treeText} rows={5} cols={120} onChange={e => setTreeText(e.target.value)}></textarea>
+            <textarea value={treeText} rows={30} cols={80} onChange={e => handleTextAreaOnChange(e.target.value)} onBlur={prettifyTextArea}></textarea>
+            <button onClick={prettifyTextArea}>Prettify</button>
+            {
+                jsonError && <span className='error'>{jsonError}</span>
+            }
         </div>
     )
 }
