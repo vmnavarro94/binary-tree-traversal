@@ -1,18 +1,27 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { BinTreeNode } from "./TreeNode";
 
+import "./TreeInput.scss"
+
 export interface TreeInputProps {
-    onChange: (newTreeNode: BinTreeNode) => void
-}
-interface TreeInputState {
-    treeText: string
+    onChange: (newTreeNode: BinTreeNode | null) => void
 }
 
-export class TreeInput extends React.Component<TreeInputProps, TreeInputState>{
-    constructor(props: TreeInputProps) {
-        super(props);
-        this.state = {
-            treeText: ""
+export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
+    const [treeText, setTreeText] = useState('');
+    const [arrayString, setArrayString] = useState('');
+    const [error, setError] = useState('')
+
+    const handleInpuArrayOnChange = (selectorFiles: FileList | null) => {
+        const reader = new FileReader();
+        const file: File | null = selectorFiles ? selectorFiles[0] : null;
+        if(file) {
+            reader.onload = e => {
+                setError('');
+                const arrayString = e.target?.result as string || '';
+                setArrayString(arrayString); 
+            }
+            reader.readAsText(file);
         }
     }
 
@@ -21,30 +30,32 @@ export class TreeInput extends React.Component<TreeInputProps, TreeInputState>{
      * @param arrayFormat [id, leftChild, rightChild] for example [1, [2], [3, null, [5]]]
      * @returns TreeNode format
      * */
-    parseArrayToTree(arrayFormat: any[]): BinTreeNode {
-        return new BinTreeNode("toBeImplemeted", null, null);
-    }
+    const parseArrayToTree = (arrayFormat: any[]): BinTreeNode | null => {
+        if (!arrayFormat)
+            return null;
+        return new BinTreeNode(arrayFormat[0], parseArrayToTree(arrayFormat[1]), parseArrayToTree(arrayFormat[2]));
+    };
 
-    convert = () => {
-        // After you implement parseArrayToTree above, uncomment the below code
-        // let treeArrayFormat: any[] = JSON.parse(this.state.treeText);
-        // this.props.onChange(this.parseArrayToTree(treeArrayFormat));
+    const convert = () => {
 
-        // After you implement parseArrayToTree above, comment the below code
-        let treeNodeFormat: BinTreeNode = JSON.parse(this.state.treeText);
-        this.props.onChange(treeNodeFormat);
+        let treeArrayFormat: any[] = [];
+        try {
+            treeArrayFormat = JSON.parse(arrayString);
+        } catch {
+            setError('The array format must be: [id, leftChild, rightChild]');
+        }
+        const tree: BinTreeNode | null = parseArrayToTree(treeArrayFormat);
+        props.onChange(tree);
     }
-
-    render() {
-        return (
-            <div>
-                <button onClick={this.convert}>Process</button><br />
-                <textarea rows={5} cols={120} onChange={(ev) => {
-                    this.setState({
-                        treeText: ev.target.value
-                    })
-                }}></textarea>
-            </div>
-        )
-    }
+    return (
+        <div>
+            Array File: <input type='file' onChange={e => handleInpuArrayOnChange(e.target.files)} /><br />
+            {
+                error && <span className='arrayInputError'>{error}</span>
+            }
+            <button onClick={convert}>Process</button><br />
+            <textarea value={treeText} rows={5} cols={120} onChange={e => setTreeText(e.target.value)}></textarea>
+        </div>
+    )
 }
+
