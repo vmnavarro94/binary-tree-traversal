@@ -19,6 +19,27 @@ I stored the reference to that node on the App state and if the node Im renderin
  - Add a field error message for syntax and structure error on the json (missing id field)
  - I refactorized the TreeInput component to a functional component and use react hooks
 
+## Screenshots
+
+### Example 1
+<img width="1593" alt="Screen Shot 2021-11-30 at 22 07 12" src="https://user-images.githubusercontent.com/12765417/144170435-68e99f37-81b5-4b95-85d4-1f4cf3d429b2.png">
+
+### Example 2
+<img width="1596" alt="Screen Shot 2021-11-30 at 22 07 34" src="https://user-images.githubusercontent.com/12765417/144170461-abb23ca3-7fb5-4050-8919-543dc8a462e4.png">
+
+### Example 3
+<img width="1595" alt="Screen Shot 2021-11-30 at 22 07 48" src="https://user-images.githubusercontent.com/12765417/144170475-b4f20a65-1f96-441a-bbc6-03383633193c.png">
+
+### Wrong file message
+<img width="722" alt="Screen Shot 2021-11-30 at 22 08 00" src="https://user-images.githubusercontent.com/12765417/144170516-7a942e87-599e-41c1-a7dc-e04c1282e895.png">
+
+### Wrong structure message
+<img width="767" alt="Screen Shot 2021-11-30 at 22 08 14" src="https://user-images.githubusercontent.com/12765417/144170544-50469fa2-5303-40ba-9cdd-f65ba846a51c.png">
+
+### Syntax error message
+![image](https://user-images.githubusercontent.com/12765417/144170620-6d9b3e78-7cda-488a-b03d-6decfdd6f4e3.png)
+
+
 ## Available Scripts
 
 In the project directory, you can run:
