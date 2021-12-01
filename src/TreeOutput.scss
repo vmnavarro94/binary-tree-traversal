@@ -1,14 +1,22 @@
 .treeNode{
-    // fill me in
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin: 15px;
+    border: 1px solid #800080;
 }
 
 .treeNode > .nodeId{
     font-weight: bold;
+    align-self: center;
 }
 .treeNode > .nodeChildren{
-    //fill me in
+    display: flex;
+    flex: 1;
+    border: 1px solid #CCCC00;
+    margin: 15px;
 }
 
-.nodeChildren > .treeNode{
-    
+.smallestNode {
+    border: 2px solid green;
 }

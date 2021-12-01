@@ -5,6 +5,9 @@
     .OutputContainer{
         padding: 10px;
         border: 1px solid black;
-        background: rgba(241, 241, 195, 0.5)
+        background: rgba(241, 241, 195, 0.5);
+        display: flex;
+        max-width: 90%;
+        height: auto;
     }
 }

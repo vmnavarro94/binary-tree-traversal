@@ -10,7 +10,9 @@ export class AppState implements IAppState {
 
     @observable bodyMessage = "Process the input text to a BinTreeNode";
 
-    @observable treeNode = new BinTreeNode("root", null, null);
+    @observable treeNode: BinTreeNode | null = new BinTreeNode("root", null, null);
+
+    @observable smallestNode: BinTreeNode | null = null;
 
     constructor() {
         makeObservable(this)
@@ -19,7 +21,8 @@ export class AppState implements IAppState {
     @action setState(newState: IAppState) {
         this.title = newState.title;
         this.bodyMessage = newState.bodyMessage;
-        this.treeNode = newState.treeNode
+        this.treeNode = newState.treeNode;
+        this.smallestNode = newState.smallestNode;
     }
 }
 
