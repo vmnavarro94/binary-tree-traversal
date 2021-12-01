@@ -1,4 +1,23 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Tree Traversal
+### Problem 1 `parseArrayToTree`
+I created a file input in which the user can attach a file with the Array Definition of the tree, then I parse the string to obtain an object, I validate that it is an array so I can alert the user in case they upload an unwanted document.
+Then once I have my array I iterate it recursively in order to parse it to a Binary tree data structure.
+### Problem 2 `visual representation`
+For this part, I created a recursive component structure in which I will continue rednering child nodes as long as I found the in the Binary tree.
+I used flexbox to position the nodes so they resize or fill if there are 1 or 2 childs respectively.
+I used a json linter to let the user know if there is a syntax error on the json
+There is a validation to verify that all nodes have ids
+### Problem 3 `find the smalles subtree`
+For this part first I created a function that iterates the tree to find the depth.
+Then to find the smallest node, I iterate the tree and for each node, I calculate the depth of the left and right child, then I choose the greater to continue looking inside recursively until the depths of left and right childs are equals, that is the deepest sub tree.
+
+I store the reference to that node and if the node Im rendering is the same as the deepest, then I set the `border: 2px solid green`
+
+### Little enhancements
+ - Validate the input to be a file with an array inside, otherwise let the user know
+ - Add a prettify button and prettify also on textarea blur
+ - Add a field error message for syntax and structure error on the json (missing id field)
+ - I refactorized the TreeInput component to a functional component and use react hooks
 
 ## Available Scripts
 
@@ -12,33 +31,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
