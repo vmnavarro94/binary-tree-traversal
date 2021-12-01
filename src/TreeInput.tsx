@@ -18,6 +18,8 @@ export interface TreeInputProps {
 const parseArrayToTree = (arrayFormat: any[]): BinTreeNode | null => {
     if (!arrayFormat)
         return null;
+    if(!Array.isArray(arrayFormat))
+        throw new Error(); 
     return new BinTreeNode(arrayFormat[0], parseArrayToTree(arrayFormat[1]), parseArrayToTree(arrayFormat[2]));
 };
 
