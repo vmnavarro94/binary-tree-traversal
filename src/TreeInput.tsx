@@ -89,6 +89,8 @@ export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
         setTreeText(jsonString);
         try {
             const tree: BinTreeNode | null = jsonlint.parse(jsonString) as BinTreeNode;
+            if(!validateJSONStructure(tree))
+                throw { message: 'All nodes should have `id` field.' };
             onJSONChange(tree);
             setSmallestNode(findSmallestNode(tree));
             setJsonError('');
@@ -101,13 +103,18 @@ export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
         try {
             let treeArrayFormat: any[] = jsonlint.parse(arrayString);
             if (!Array.isArray(treeArrayFormat))
-                throw new Error();
+                throw new Error(); 
             const tree: BinTreeNode | null = parseArrayToTree(treeArrayFormat);
+            if(!validateJSONStructure(tree))
+                throw { jsonError: 'All nodes should have `id` field.' };
             onJSONChange(tree);
             setSmallestNode(findSmallestNode(tree));
             setTreeText(prettyStringify(tree));
-        } catch {
-            setArrayError('The array format must be: [id, leftChild, rightChild]');
+        } catch (e){
+            if (e.jsonError)
+                setJsonError(e.jsonError);
+            else
+                setArrayError('The array format must be: [id, leftChild, rightChild]');
         } 
     }
 
@@ -119,6 +126,13 @@ export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
         } catch (e) {
             setJsonError(e.message);
         }
+    };
+
+    const validateJSONStructure = (tree: BinTreeNode | null): boolean => {
+        //Nodes should have always id field
+        if( tree && !tree.id ) return false;
+        if(!tree) return true;
+        return validateJSONStructure(tree.right) || validateJSONStructure(tree.left);
     };
 
     return (
