@@ -11,7 +11,7 @@ There is a validation to verify that all nodes have ids
 For this part first I created a function that iterates the tree to find the depth.
 Then to find the smallest node, I iterate the tree and for each node, I calculate the depth of the left and right child, then I choose the greater to continue looking inside recursively until the depths of left and right childs are equals, that is the deepest sub tree.
 
-I store the reference to that node and if the node Im rendering is the same as the deepest, then I set the `border: 2px solid green`
+I stored the reference to that node on the App state and if the node Im rendering is the same as the deepest, then I set the `border: 2px solid green`
 
 ### Little enhancements
  - Validate the input to be a file with an array inside, otherwise let the user know
