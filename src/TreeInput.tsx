@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BinTreeNode } from "./TreeNode";
+import { BinTreeNode, createBinTreeNode } from "./TreeNode";
 /// @ts-ignore
 import jsonlint from 'jsonlint-mod';
 
@@ -88,9 +88,8 @@ export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
     const handleTextAreaOnChange = (jsonString: string) => {
         setTreeText(jsonString);
         try {
-            const tree: BinTreeNode | null = jsonlint.parse(jsonString) as BinTreeNode;
-            if(!validateJSONStructure(tree))
-                throw { message: 'All nodes should have `id` field.' };
+            let tree: BinTreeNode | null = jsonlint.parse(jsonString) as BinTreeNode;
+            tree = createBinTreeNode(tree); 
             onJSONChange(tree);
             setSmallestNode(findSmallestNode(tree));
             setJsonError('');
@@ -104,7 +103,7 @@ export const TreeInput: React.FC<TreeInputProps> = (props: TreeInputProps) => {
             let treeArrayFormat: any[] = jsonlint.parse(arrayString);
             if (!Array.isArray(treeArrayFormat))
                 throw new Error(); 
-            const tree: BinTreeNode | null = parseArrayToTree(treeArrayFormat);
+            const tree: any = parseArrayToTree(treeArrayFormat);
             if(!validateJSONStructure(tree))
                 throw { jsonError: 'All nodes should have `id` field.' };
             onJSONChange(tree);
